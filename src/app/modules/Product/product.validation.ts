@@ -12,6 +12,19 @@ const productSchema = z.object({
   isDeleted: z.boolean().default(false), // Soft delete field with a default value of false
 });
 // Exporting the validation schema
+// Define the update schema for the product
+const updateProductSchema = z.object({
+  image: z.string().url().optional(), // Optional, must be a valid URL if provided
+  title: z.string().optional(), // Optional for updates
+  brand: z.string().optional(), // Optional for updates
+  availableQuantity: z.number().min(0, { message: 'Quantity cannot be negative.' }).optional(), // Optional for updates
+  price: z.number().positive({ message: 'Price must be a positive number.' }).optional(), // Optional for updates
+  rating: z.number().min(0).max(5).optional(), // Optional for updates
+  description: z.string().optional(), // Optional for updates
+  isDeleted: z.boolean().optional(), // Optional for updates
+});
+
 export const ProductValidations = {
   productSchema,
+  updateProductSchema
 };

@@ -20,6 +20,12 @@ router.get(
   '/:id', // Assumes the product ID is passed as a URL parameter
   ProductControllers.getSingleProduct,
 );
+// Route to update a product by ID
+router.put(
+  '/:id', // Assumes the product ID is passed as a URL parameter
+  validateRequest(ProductValidations.updateProductSchema), // Add validation for the update schema
+  ProductControllers.updateProduct // Call the product update controller
+);
 router.delete(
   '/:id', // Assumes the product ID is passed as a URL parameter
   ProductControllers.softDeleteProduct,

@@ -39,6 +39,20 @@ const getSingleProduct: RequestHandler = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+// Controller to update a product by ID
+const updateProduct: RequestHandler = catchAsync(async (req, res) => {
+  const { id } = req.params; // Assumes the product ID is passed as a URL parameter
+  const updatedData = req.body; // The data to update
+  const result = await ProductServices.updateProductInDB(id, updatedData);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Product updated successfully",
+    data: result,
+  });
+});
 // Controller to soft delete product by ID
 const softDeleteProduct: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params; // Assumes the product ID is passed as a URL parameter
@@ -57,5 +71,6 @@ export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProduct,
-  softDeleteProduct
+  softDeleteProduct,
+  updateProduct
 };
