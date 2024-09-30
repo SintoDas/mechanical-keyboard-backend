@@ -49,14 +49,13 @@ const deleteCart: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-// Controller to update a cart item by ID
 const updateCart: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await CartServices.updateCart(id, req.body);
   res.status(httpStatus.OK).json({
     success: true,
     statusCode: httpStatus.OK,
-    message: "Cart item updated successfully",
+    message: 'Cart item updated successfully',
     data: result,
   });
 });

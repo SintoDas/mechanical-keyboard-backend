@@ -1,10 +1,23 @@
+import CartItem from "../Cart/cart.mode";
+import Product from "../Product/product.model";
 import { TCheckout } from "./checkout.interface"; // Import the TCheckout interface
 import Checkout from "./checkout.model"; // Import the Checkout model
 
 // Function to create a new checkout entry in the database
 const createCheckoutInDB = async (payload: TCheckout) => {
-  const newCheckout = await Checkout.create(payload);
-  return newCheckout;
+  const checkout = await Checkout.create(payload);
+
+  // After checkout, update product stock for all cart items
+  const cartItems = await CartItem.find();
+  for (const cartItem of cartItems) {
+    const product = await Product.findById(cartItem?.productId);
+    if (product) {
+      product.availableQuantity -= cartItem.quantity;
+      await product.save();
+    }
+  }
+
+  return checkout;
 };
 
 // Function to get all checkouts from the database

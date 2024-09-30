@@ -20,7 +20,11 @@ router.get('/', CartControllers.getAllCart);
 router.get('/:id', CartControllers.getSingleCart);
 
 // Route to update a cart by ID
-router.put('/:id', CartControllers.updateCart);
+router.put(
+  '/:id',
+  validateRequest(CartValidations.updateCartItemSchema), // Validate update request
+  CartControllers.updateCart
+);
 
 // Route to delete a cart by ID
 router.delete('/:id', CartControllers.deleteCart);
