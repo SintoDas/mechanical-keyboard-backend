@@ -28,7 +28,7 @@ router.put(
 );
 router.delete(
   '/:id', // Assumes the product ID is passed as a URL parameter
-  ProductControllers.softDeleteProduct,
+  ProductControllers.deleteProduct,
 );
 
 export const ProductRoutes = router;

@@ -30,14 +30,10 @@ const getSingleProductFromDB = async (productId: string) => {
   return product;
 };
 // Function to soft delete a product by setting isDeleted to true
-const softDeleteProductFromDB = async (productId: string) => {
-  const deletedProduct = await Product.findByIdAndUpdate(
-    productId,
-    { isDeleted: true },
-    { new: true }
-  );
+const deleteProductFromDB = async (productId: string) => {
+  const deletedProduct = await Product.findByIdAndDelete(productId);
   return deletedProduct;
-}
+};
 const updateProductInDB = async (productId: string, payload: Partial<TProduct>) => {
   const updatedProduct = await Product.findByIdAndUpdate(productId, payload, {
     new: true, // Returns the updated document
@@ -52,6 +48,6 @@ export const ProductServices = {
   createProductIntoDB,
   getAllProductsFromDB,
   getSingleProductFromDB,
-  softDeleteProductFromDB,
+  deleteProductFromDB,
   updateProductInDB
 };

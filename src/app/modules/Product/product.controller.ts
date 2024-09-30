@@ -17,7 +17,7 @@ const createProduct: RequestHandler = catchAsync(async (req, res) => {
 
 // Controller to get all products
 const getAllProducts: RequestHandler = catchAsync(async (req, res) => {
-  const result = await ProductServices.getAllProductsFromDB();
+  const result = await ProductServices.getAllProductsFromDB(req.query);
 
   res.status(httpStatus.OK).json({
     success: true,
@@ -54,9 +54,9 @@ const updateProduct: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 // Controller to soft delete product by ID
-const softDeleteProduct: RequestHandler = catchAsync(async (req, res) => {
+const deleteProduct: RequestHandler = catchAsync(async (req, res) => {
   const { id } = req.params; // Assumes the product ID is passed as a URL parameter
-  const result = await ProductServices.softDeleteProductFromDB(id);
+  const result = await ProductServices.deleteProductFromDB(id);
 
   res.status(httpStatus.OK).json({
     success: true,
@@ -71,6 +71,6 @@ export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProduct,
-  softDeleteProduct,
+  deleteProduct,
   updateProduct
 };
