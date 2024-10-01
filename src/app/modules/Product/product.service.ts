@@ -9,21 +9,42 @@ const createProductIntoDB = async (payload: TProduct) => {
     const newProduct = await Product.create(payload);
     return newProduct;
   };
-// Function to get all products from the database
-const  getAllProductsFromDB = async (query: Record<string, unknown>) => {
 
-  const productQuery = new QueryBuilder(
-    Product.find(),query
-  )
-    .search(productSearchableFields)
-    .filter()
-    .sort()
-    .paginate()
-    .fields();
+  const getAllProductsFromDB = async (query: Record<string, unknown>) => {
+    // Define the number of items per page
+    const itemsPerPage = query.limit ? parseInt(query.limit as string) : 10; // Default to 10 if not provided
+    const page = query.page ? parseInt(query.page as string) : 1; // Default to page 1 if not provided
+  
+    // Create a base query for fetching products
+    const productQueryBuilder = new QueryBuilder(Product.find(), query)
+      .search(productSearchableFields) // Assume productSearchableFields is defined
+      .filter()
+      .sort()
+      .fields();
+  
+    // Create a separate query for counting documents (do not reuse the same query instance)
+    const countQueryBuilder = new QueryBuilder(Product.find(), query)
+      .search(productSearchableFields)
+      .filter();
+  
+    // Execute the counting query
+    const totalProducts = await countQueryBuilder.modelQuery.countDocuments();
+  
+    // Execute the paginated query
+    const results = await productQueryBuilder.paginate().modelQuery;
+  
+    // Calculate total pages
+    const totalPages = Math.ceil(totalProducts / itemsPerPage);
+  
+    return {
+      results,
+      totalProducts,
+      totalPages,
+      currentPage: page,
+    };
+  };
 
-  const result = await productQuery.modelQuery;
-  return result;
-};
+
 // Function to get a single product by ID from the database
 const getSingleProductFromDB = async (productId: string) => {
   const product = await Product.findById(productId);
