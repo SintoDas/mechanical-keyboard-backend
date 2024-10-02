@@ -37,4 +37,7 @@ router.delete(
   CheckoutControllers.softDeleteCheckout // Call the controller to soft delete a checkout
 );
 
+router.post('/create-payment-intent', CheckoutControllers.createPaymentIntent);
+
+
 export const CheckoutRoutes = router; // Export the router for use in your application
